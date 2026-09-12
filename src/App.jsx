@@ -43,7 +43,8 @@ function App() {
   return (
     <div className='flex justify-center items-center h-full w-full'>
       <div className='text-center text-blue-400 font-medium'>
-        <h1 className='text-cyan-700 font-black text-5xl my-10'>Sora<span className='text-teal-800'>iro</span></h1>
+        <h1 className='text-blue-600 font-black text-5xl mt-10'>Sora<span className='text-teal-800'>iro</span></h1>
+        <p className="mb-10 font-thin">Use your location to get weather information</p>
         {weather ? (
           <div className='text-center w-130'>
             <div className='flex justify-around'>
@@ -89,7 +90,7 @@ function App() {
               </div>
             </div>
           </div>
-        ) : <p className='italic text-lime-600'>Loading weather data.....</p>}
+        ) : <p className='italic text-cyan-900'>Loading weather data.....</p>}
       </div>
     </div>
   )
