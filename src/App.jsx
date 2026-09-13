@@ -50,12 +50,12 @@ function App() {
             <div className='flex justify-around'>
               <div>
                 <p>Latitude</p>
-                <p className='text-3xl text-blue-500'>{location?.latitude}</p>
+                <p className='text-3xl text-blue-500'>{location?.latitude.toFixed(6)}</p>
               </div>
 
               <div>
                 <p>Longitude</p>
-                <p className='text-3xl text-blue-500'>{location?.longitude}</p>
+                <p className='text-3xl text-blue-500'>{location?.longitude.toFixed(6)}</p>
               </div>
             </div>
 
