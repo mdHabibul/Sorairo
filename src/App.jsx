@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import AiOverview from './AiOverview'
 import './App.css'
 
 function App() {
@@ -41,7 +42,7 @@ function App() {
   }, [location])
 
   return (
-    <div className='flex justify-center items-center h-full w-full'>
+    <div className='flex flex-col justify-center items-center h-full w-full'>
       <div className='text-center text-blue-400 font-medium'>
         <h1 className='text-blue-600 font-black text-5xl mt-10'>Sora<span className='text-teal-800'>iro</span></h1>
         <p className="mb-10 font-thin">Use your location to get weather information</p>
@@ -92,6 +93,9 @@ function App() {
           </div>
         ) : <p className='italic text-cyan-900'>Loading weather data.....</p>}
       </div>
+      {weather && <div>
+        <div><AiOverview weather={weather} className="bg-red-500" /></div>
+      </div>}
     </div>
   )
 }
