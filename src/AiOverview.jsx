@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { GoogleGenAI } from "@google/genai";
 
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY?.trim();
 const ai = new GoogleGenAI({
-    apiKey: import.meta.env.VITE_GEMINI_API_KEY,
+    apiKey,
 });
 
 export default function AiOverview({ weather }) {
@@ -11,10 +12,16 @@ export default function AiOverview({ weather }) {
     const [error, setError] = useState(null);
 
     const askWeather = async () => {
+        if (loading) return;
+
         setLoading(true);
         setError(null);
 
         try {
+            if (!apiKey) {
+                throw new Error("VITE_GEMINI_API_KEY is not configured.");
+            }
+
             const prompt = `
 Act as a professional weather expert.
 
@@ -40,7 +47,7 @@ weather must be one of:
 
 
             const response = await ai.models.generateContent({
-                model: "gemini-flash-latest",
+                model: "gemini-3.6-flash",
                 contents: prompt,
                 config: {
                     responseMimeType: "application/json",
@@ -56,7 +63,7 @@ weather must be one of:
 
             setResult(data);
         } catch (error) {
-            console.error(error);
+            console.error("AI recommendation request failed:", error);
             setError("Unable to get an AI recommendation. Please try again.");
         } finally {
             setLoading(false);
@@ -67,7 +74,7 @@ weather must be one of:
         <>
             {!result && (
                 <div onClick={askWeather} className='bg-indigo-400 text-blue-50 p-4 rounded-lg shadow-sm hover:shadow-lg hover:cursor-pointer w-130 my-10 flex justify-between items-center'>
-                    <button>
+                    <button type="button" disabled={loading}>
                         {loading ? "Checking..." : "AI Weather Recommendation"}
                     </button>
 
@@ -77,7 +84,7 @@ weather must be one of:
                 </div>
             )}
 
-            {error && <p className='text-red-600'>{error}</p>}
+            {error && <p className='bg-red-600 text-blue-50 p-4 rounded-lg shadow-sm w-130 mt-[-40px]'>{error}</p>}
 
             <div>
                 {result && (
