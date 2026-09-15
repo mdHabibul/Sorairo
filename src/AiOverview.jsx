@@ -8,9 +8,11 @@ const ai = new GoogleGenAI({
 export default function AiOverview({ weather }) {
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const askWeather = async () => {
         setLoading(true);
+        setError(null);
 
         try {
             const prompt = `
@@ -36,21 +38,29 @@ weather must be one of:
 "good", "moderate", "bad", etc...
 `;
 
-            console.log(prompt);
 
             const response = await ai.models.generateContent({
-                model: "gemini-3.8-flash",
+                model: "gemini-flash-latest",
                 contents: prompt,
+                config: {
+                    responseMimeType: "application/json",
+                },
             });
 
-            const data = JSON.parse(response.text);
+            const text = response.text?.trim();
+            if (!text) {
+                throw new Error("The AI returned an empty response.");
+            }
+
+            const data = JSON.parse(text.replace(/^```json\s*|\s*```$/g, ""));
 
             setResult(data);
         } catch (error) {
             console.error(error);
+            setError("Unable to get an AI recommendation. Please try again.");
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
     return (
@@ -66,6 +76,8 @@ weather must be one of:
                     </div>
                 </div>
             )}
+
+            {error && <p className='text-red-600'>{error}</p>}
 
             <div>
                 {result && (
