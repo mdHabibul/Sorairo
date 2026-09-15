@@ -69,7 +69,7 @@ weather must be one of:
 
             <div>
                 {result && (
-                    <div>
+                    <div className='bg-indigo-400 text-blue-50 p-4 rounded-lg shadow-sm w-130 my-10'>
                         <p>Weather: <strong>{result.weather.toUpperCase()}</strong></p>
                         <p>{result.recommendation}</p>
                     </div>
